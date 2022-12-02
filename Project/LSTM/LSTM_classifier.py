@@ -3,7 +3,7 @@ import random
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.layers import Input, Masking, LSTM, Dense
+from tensorflow.keras.layers import Input, Masking, LSTM, Dense, Bidirectional
 from tensorflow.keras.callbacks import EarlyStopping
 import tensorflow as tf
 
@@ -24,9 +24,9 @@ class LSTMclf:
         self.lr = lr
         self.trained = False
         self.optimizer = Adam(learning_rate=self.lr)
-        self.__define_model()
+        self.define_model()
 
-    def __define_model(self):
+    def define_model(self):
         self.model = Sequential([
             Input(shape=self.input_shape[1:]),
             Masking(mask_value=-10),
@@ -41,7 +41,7 @@ class LSTMclf:
         val_labels = []
         pred_labels = []
         if verbose:
-            self.__define_model()
+            self.define_model()
             message = f'Beginning training LSTM with {num_folds}-fold validation...'
             print(message)
         for i in range(num_folds):
@@ -81,8 +81,19 @@ class LSTMclf:
 
     def evaluate(self, X, y, batch_size):
         assert self.trained, 'Model has not been trained yet.'
-        pred_labels = self.model.predict(X, batch_size=batch_size, verbose=1)
-        metrics = evalate(y, pred_labels)
-        return pred_labels, metrics
+        pred = self.model.predict(X).reshape(-1)
+        pred = (pred > 0.5).astype(int)
+        metrics = eval(y, pred)
+        return pred, metrics
 
 
+class BiLSTMclf(LSTMclf):
+    def define_model(self):
+        self.model = Sequential([
+            Input(shape=self.input_shape[1:]),
+            Masking(mask_value=-10),
+            Bidirectional(LSTM(self.lstm_size)),
+            Dense(1, activation='sigmoid')
+        ])
+        self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', 
+                           metrics=['accuracy'])
