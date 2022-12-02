@@ -1,0 +1,1 @@
+{"SVM": {"kernel": "poly", "max_gap": 9.0, "min_support_pos": 0.1, "min_support_neg": 0.1}, "LogisticRegression": {"max_gap": 10.0, "min_support_pos": 0.3, "min_support_neg": 0.3}}

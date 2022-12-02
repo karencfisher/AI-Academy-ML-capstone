@@ -1,0 +1,74 @@
+----------------------------------------
+Model: SVC(gamma=0.1, kernel='poly')
+RTM_params: {'max_gap': 9.0, 'min_support_pos': 0.1, 'min_support_neg': 0.1}
+number of frequent states are: 21
+the number of one-RTPs: 18
+-----------length of the candidates for 2 pattern is: 266
+-----------length of the kRTP for 2 pattern is: 10
+-----------length of the candidates for 3 pattern is: 123
+-----------length of the kRTP for 3 pattern is: 8
+-----------length of the candidates for 4 pattern is: 85
+-----------length of the kRTP for 4 pattern is: 3
+-----------length of the candidates for 5 pattern is: 43
+-----------length of the kRTP for 5 pattern is: 1
+-----------length of the candidates for 6 pattern is: 15
+-----------length of the kRTP for 6 pattern is: 0
+number of all patterns found: 40
+number of frequent states are: 14
+the number of one-RTPs: 8
+-----------length of the candidates for 2 pattern is: 75
+-----------length of the kRTP for 2 pattern is: 6
+-----------length of the candidates for 3 pattern is: 147
+-----------length of the kRTP for 3 pattern is: 22
+-----------length of the candidates for 4 pattern is: 362
+-----------length of the kRTP for 4 pattern is: 13
+-----------length of the candidates for 5 pattern is: 256
+-----------length of the kRTP for 5 pattern is: 3
+-----------length of the candidates for 6 pattern is: 66
+-----------length of the kRTP for 6 pattern is: 0
+number of all patterns found: 52
+Beginning training SVM with 5-fold validation...
+Fold 1: train_accuracy = 0.8477508650519031 val_accuracy = 0.9444444444444444
+Fold 2: train_accuracy = 0.856401384083045 val_accuracy = 0.8819444444444444
+Fold 3: train_accuracy = 0.8719723183391004 val_accuracy = 0.8125
+Fold 4: train_accuracy = 0.8996539792387543 val_accuracy = 0.6666666666666666
+Fold 5: train_accuracy = 0.8858131487889274 val_accuracy = 0.75
+Training completed!
+Final metrics: {'accuracy': 0.8111111111111111, 'precision': 0.7539503386004515, 'recall': 0.925207756232687, 'f1': 0.8308457711442786, 'auc': 0.8107932931581262}
+----------------------------------------
+Model: LogisticRegression()
+RTM_params: {'max_gap': 10.0, 'min_support_pos': 0.3, 'min_support_neg': 0.3}
+number of frequent states are: 18
+the number of one-RTPs: 4
+-----------length of the candidates for 2 pattern is: 61
+-----------length of the kRTP for 2 pattern is: 1
+-----------length of the candidates for 3 pattern is: 39
+-----------length of the kRTP for 3 pattern is: 3
+-----------length of the candidates for 4 pattern is: 110
+-----------length of the kRTP for 4 pattern is: 3
+-----------length of the candidates for 5 pattern is: 81
+-----------length of the kRTP for 5 pattern is: 1
+-----------length of the candidates for 6 pattern is: 19
+-----------length of the kRTP for 6 pattern is: 0
+number of all patterns found: 12
+number of frequent states are: 9
+the number of one-RTPs: 5
+-----------length of the candidates for 2 pattern is: 58
+-----------length of the kRTP for 2 pattern is: 6
+-----------length of the candidates for 3 pattern is: 132
+-----------length of the kRTP for 3 pattern is: 10
+-----------length of the candidates for 4 pattern is: 184
+-----------length of the kRTP for 4 pattern is: 5
+-----------length of the candidates for 5 pattern is: 90
+-----------length of the kRTP for 5 pattern is: 1
+-----------length of the candidates for 6 pattern is: 15
+-----------length of the kRTP for 6 pattern is: 0
+number of all patterns found: 27
+Beginning training SVM with 5-fold validation...
+Fold 1: train_accuracy = 0.8477508650519031 val_accuracy = 0.8194444444444444
+Fold 2: train_accuracy = 0.8494809688581315 val_accuracy = 0.7777777777777778
+Fold 3: train_accuracy = 0.8650519031141869 val_accuracy = 0.8055555555555556
+Fold 4: train_accuracy = 0.8598615916955017 val_accuracy = 0.75
+Fold 5: train_accuracy = 0.8512110726643599 val_accuracy = 0.7847222222222222
+Training completed!
+Final metrics: {'accuracy': 0.7875, 'precision': 0.7722513089005235, 'recall': 0.817174515235457, 'f1': 0.7940780619111709, 'auc': 0.7874173411831882}
