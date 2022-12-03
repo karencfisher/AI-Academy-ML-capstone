@@ -6,26 +6,19 @@ from LSTM.Config import Options as opts
 from LSTM.TemporalAbstraction import discretization, make_MSS
 
 
-def preprocess(pos_data, neg_data, filter=True, max_times=None):
+def preprocess(pos_data, neg_data, filter=True, encode=True, max_times=40000):
     pos_data, neg_data = split_data(pos_data, neg_data)
 
-    if filter:
-        pos_data = filter_outlier_sequences(pos_data)
-        neg_data = filter_outlier_sequences(neg_data)
-
-    if max_times is None:
-        max_pos_timestamp = pos_data[opts.timestamp_variable].max()
-        max_neg_timestamp = neg_data[opts.timestamp_variable].max()
-        max_pos_time = int(math.ceil(max_pos_timestamp / opts.interval))
-        max_neg_time = int(math.ceil(max_neg_timestamp / opts.interval))
-        max_times = max(max_pos_time, max_neg_time)
+    pos_data = filter_outlier_sequences(pos_data, max_times)
+    neg_data = filter_outlier_sequences(neg_data, max_times)
 
     # First, we will use the RTP code to get Multivariate State Sequences
-    for value in opts.numerical_feat:
-        temperature = value == 'Temperature'
-        pos_data[value], neg_data[value] = discretization(pos_data[value], 
-                                                          neg_data[value],
-                                                          temperature=temperature) 
+    if encode:
+        for value in opts.numerical_feat:
+            temperature = value == 'Temperature'
+            pos_data[value], neg_data[value] = discretization(pos_data[value], 
+                                                            neg_data[value],
+                                                            temperature=temperature) 
     MSS_pos = make_MSS(pos_data)
     MSS_neg = make_MSS(neg_data)
     MSS = MSS_pos + MSS_neg
@@ -35,9 +28,9 @@ def preprocess(pos_data, neg_data, filter=True, max_times=None):
     dataset = reconstruct_timeline(MSS, max_times, opts.interval)
     labels = [1 for _ in range(len(MSS_pos))]
     labels += [0 for _ in range(len(MSS_neg))]
-    return dataset, np.array(labels), max_times
+    return dataset, np.array(labels)
 
-def filter_outlier_sequences(input_data, threshold=40000):
+def filter_outlier_sequences(input_data, threshold):
     counts = input_data.groupby(by='VisitIdentifier')['MinutesFromArrival'].max()
     counts.sort_values(ascending=False)
     outliers = counts[counts > threshold].index.values.tolist()
@@ -48,6 +41,7 @@ def reconstruct_timeline(MSS, max_times, interval):
     feature_map = {feat: indx for indx, feat in enumerate(opts.numerical_feat)}
     n_visits = len(MSS)
     n_features = len(opts.numerical_feat)
+    max_times = int(math.ceil(max_times / opts.interval))
     data = np.full((n_visits, max_times, n_features), -10, dtype=int)
     for visit_indx, MSS_events in enumerate(MSS):
         for event in MSS_events:

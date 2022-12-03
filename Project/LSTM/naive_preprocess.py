@@ -6,57 +6,33 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from LSTM.Config import Options as opts
 
 
-def process_data(pos_train, neg_train, pos_test, neg_test, filter=True):
-    pos_train_data, neg_train_data = split_data(pos_train, neg_train)
-    if filter:
-        pos_train_data, pos_count = filter_outlier_sequences(pos_train_data)
-        neg_train_data, neg_count = filter_outlier_sequences(neg_train_data)
-    raw_train_data = pd.concat([pos_train_data, neg_train_data])
-    train_count = max(pos_count, neg_count)
+def process_data(pos_data, neg_data, max_steps=500):
+    pos_data, neg_data = split_data(pos_data, neg_data)
+    pos_data = filter_outlier_sequences(pos_data, max_steps)
+    neg_data = filter_outlier_sequences(neg_data, max_steps)
+    raw_data = pd.concat([pos_data, neg_data])
 
-    pos_test_data, neg_test_data = split_data(pos_test, neg_test)
-    if filter:
-        pos_test_data, pos_count = filter_outlier_sequences(pos_test_data)
-        neg_test_data, neg_count = filter_outlier_sequences(neg_test_data)
-    raw_test_data = pd.concat([pos_test_data, neg_test_data])
-    test_count = max(pos_count, neg_count)
+    pos_ids = pos_data['VisitIdentifier'].unique().tolist()
+    neg_ids = neg_data['VisitIdentifier'].unique().tolist()
+    ids = pos_ids + neg_ids
+    print(f'training visits: {len(ids)}')
 
-    pos_train_ids = pos_train_data['VisitIdentifier'].unique().tolist()
-    neg_train_ids = neg_train_data['VisitIdentifier'].unique().tolist()
-    train_ids = pos_train_ids + neg_train_ids
-    print(f'training visits: {len(train_ids)}')
+    data = [raw_data[raw_data['VisitIdentifier'] == i]
+                 [opts.numerical_feat].values.tolist() for i in ids]
+    data = pad_sequences(data, padding='post', 
+                         value=-10, maxlen=max_steps).tolist()
 
-    pos_test_ids = pos_test_data['VisitIdentifier'].unique().tolist()
-    neg_test_ids = neg_test_data['VisitIdentifier'].unique().tolist()
-    test_ids = pos_test_ids + neg_test_ids
-    print(f'test visits: {len(test_ids)}')
-
-    train_data = [raw_train_data[raw_train_data['VisitIdentifier'] == 
-            i][opts.numerical_feat].values.tolist() for i in train_ids]
-    test_data = [raw_test_data[raw_test_data['VisitIdentifier'] == 
-            i][opts.numerical_feat].values.tolist() for i in test_ids]
-
-    max_len = max(train_count, test_count)
-    train_data = pad_sequences(train_data, padding='post', 
-                               value=-10, maxlen=max_len).tolist()
-    test_data = pad_sequences(test_data, padding='post', 
-                               value=-10, maxlen=max_len).tolist()
-
-    train_labels = [1 for _ in range(len(pos_train_ids))]
-    train_labels.extend(0 for _ in range(len(neg_train_ids)))
-    test_labels = [1 for _ in range(len(pos_test_ids))]
-    test_labels.extend(0 for _ in range(len(neg_test_ids)))
-    return train_data, train_labels, test_data, test_labels
+    labels = [1 for _ in range(len(pos_ids))]
+    labels.extend(0 for _ in range(len(neg_ids)))
+    return data, labels
 
 
-def filter_outlier_sequences(input_data, threshold=900):
+def filter_outlier_sequences(input_data, threshold):
     counts = input_data.groupby(by='VisitIdentifier')['MinutesFromArrival'].count()
     counts.sort_values(ascending=False)
     outliers = counts[counts > threshold].index.values.tolist()
     output_data = input_data[~input_data['VisitIdentifier'].isin(outliers)]
-    counts = counts[counts <= threshold]
-    max_len = counts[counts <= threshold].max()
-    return output_data, max_len
+    return output_data
     
 
 def split_data(pos_events, neg_events):

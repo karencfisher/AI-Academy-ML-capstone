@@ -134,7 +134,7 @@ def make_MSS(events):
         MSS.append(mss)
     return MSS
 
-def preprocess(pos_events, neg_events):
+def preprocess(pos_events, neg_events, encode=True):
     if opts.early_prediction > 0 and opts.alignment == 'right':
         pos_cut = pos_events[pos_events.EventTime - pos_events[opts.timestamp_variable] >= 
                                                     opts.early_prediction * 60]
@@ -156,11 +156,12 @@ def preprocess(pos_events, neg_events):
         pos_events = pos_cut
         neg_events = neg_cut
 
-    for value in opts.numerical_feat:
-        temperature = value == 'Temperature'
-        pos_events[value], neg_events[value] = ta.discretization(pos_events[value], 
-                                                                 neg_events[value],
-                                                                 temperature=temperature) 
+    if encode:
+        for value in opts.numerical_feat:
+            temperature = value == 'Temperature'
+            pos_events[value], neg_events[value] = ta.discretization(pos_events[value], 
+                                                                    neg_events[value],
+                                                                    temperature=temperature) 
     MSS_pos = make_MSS(pos_events)
     MSS_neg = make_MSS(neg_events)
     return MSS_pos, MSS_neg
