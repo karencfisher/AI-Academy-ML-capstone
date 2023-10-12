@@ -1,3 +1,18 @@
+### Introduction
+
+Sepsis is the leading cause of mortality in the United States and the most expensive condition
+associated with in-hospital stay, accounting for 6.2% (nearly $24 billion) of total hospital costs.
+In particular, Septic shock, the most advanced complication of sepsis due to severe abnormalities
+of circulation and/or cellular metabolism, reaches a mortality rate as high as 50% and the annual
+incidence keeps rising. It is estimated that as many as 80% of sepsis deaths could be prevented
+with early diagnosis and intervention; indeed prior studies have demonstrated that early diagnosis
+and treatment of septic shock can significantly decrease patients’ mortality and shorten their length
+of stay.
+
+In this project, I have built and compared to machine learning approaches to accurate early diagnosis
+of septic shock. The aim is to be able to forecast of the probability that a hospital patient will
+enter into shock in the next 24 hours, based on their present charts.
+
 ### Top level notebooks:
 
 **split_data.ipynb**: Run once to split data sets into training and test sets. Same splits used in all tests to maintain consistency.
