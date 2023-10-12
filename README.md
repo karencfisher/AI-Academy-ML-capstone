@@ -21,3 +21,11 @@
 **time_reconstructed_BiLSTM.ipynb**: Same, except with bidirectional LSTM. With discretization.
 
 **time_reconstructed_noencode_BiLSTM.ipynb**: Same, but without discretization.
+
+result set	accuracy	precision	recall	f1	auc
+1	naive_results	0.891892	0.837209	0.972973	0.900000	0.891892
+0	bi_results	0.878378	0.833333	0.945946	0.886076	0.878378
+3	tr_noencode_bi_results	0.864865	0.846154	0.891892	0.868421	0.864865
+4	tr_noencode_results	0.837838	0.857143	0.810811	0.833333	0.837838
+5	tr_results	0.729730	0.717949	0.756757	0.736842	0.729730
+2	tr_bi_lstm_results	0.554054	0.529412	0.972973	0.685714	0.554054
