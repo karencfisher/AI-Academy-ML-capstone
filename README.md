@@ -21,10 +21,17 @@ enter into shock in the next 24 hours, based on their present charts. This will 
 
 ### Multivariate State Sequence
 
-One of the characteristics of EHR is that the time intervals between reords are not necessarily even. In addition, different tracked values such as vitals are not recorded at each time step. For conventional time sequence modelling, such as RNN or LSTM, the assumption is that time steps are at regular intervals, such as 30 minutes. An approach to preprocess such records is to convert them to a multivariate state sequence.
+One of the characteristics of EHR is that the time intervals between reords are not necessarily even. In addition, different tracked values such as vitals are not recorded at each time step. For conventional time sequence modelling, such as RNN or LSTM, the assumption is that time steps are at regular intervals, such as 30 minutes. An approach to preprocess such records is to convert them to a multivariate state sequence (MSS), abstracting the durations of different readings over time.
 
 ![](mss.jpg)
 
+### Recent Temporal Patterns
+
+From the MSS one can discern various frequent temporal patterns, such as a drop in temperature often drops during or after a drop in blood pressure. These patterns are then the features to be input to a classifier such as SVC. 
+
+### "Naive" LSTM vs. Reconstructed Time Sequences
+
+The "naive" approach takes the original EHR with time intervals as they are, with irregular intervals. Normally, for LSTM time sequence modelling, one assumes regular time intervals (such as every half hour). The other approach is to reconstruct the time intervals to a regular period of every 10 minutes. To do so I frist constructed a MSS, as above, and then created time intervals of 10 minutes for all patients.
 
 ### References
 
