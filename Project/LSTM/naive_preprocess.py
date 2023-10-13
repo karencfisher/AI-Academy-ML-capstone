@@ -15,7 +15,6 @@ def process_data(pos_data, neg_data, max_steps=500):
     pos_ids = pos_data['VisitIdentifier'].unique().tolist()
     neg_ids = neg_data['VisitIdentifier'].unique().tolist()
     ids = pos_ids + neg_ids
-    print(f'training visits: {len(ids)}')
 
     data = [raw_data[raw_data['VisitIdentifier'] == i]
                  [opts.numerical_feat].values.tolist() for i in ids]

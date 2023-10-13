@@ -1,17 +1,36 @@
 ### Introduction
 
-Sepsis is the leading cause of mortality in the United States and the most expensive condition
+From the paper "Recent Temporal Pattern Mining for Septic Shock Early Prediction":
+
+"Sepsis is the leading cause of mortality in the United States and the most expensive condition
 associated with in-hospital stay, accounting for 6.2% (nearly $24 billion) of total hospital costs.
 In particular, Septic shock, the most advanced complication of sepsis due to severe abnormalities
 of circulation and/or cellular metabolism, reaches a mortality rate as high as 50% and the annual
 incidence keeps rising. It is estimated that as many as 80% of sepsis deaths could be prevented
 with early diagnosis and intervention; indeed prior studies have demonstrated that early diagnosis
 and treatment of septic shock can significantly decrease patients’ mortality and shorten their length
-of stay.
+of stay."[1]
 
-In this project, I have built and compared to machine learning approaches to accurate early diagnosis
-of septic shock. The aim is to be able to forecast of the probability that a hospital patient will
-enter into shock in the next 24 hours, based on their present charts.
+In this project, I have built and compared two machine learning approaches to accurate early diagnosis
+of septic shock from Electronic Health Records (EHR). The first approach is to use Recent Temporal Pattern Mining to extract temporal patterns from EHR to be fed into classifiers such as SVC and Logistic Regression. The second approach is to use LSTM neural networks with and without using preprocessing of the EHR to normalize time intervals between medical events. 
+
+The aim is to be able to best forecast the probability that a hospital patient will
+enter into shock in the next 24 hours, based on their present charts. This will enable the medical team to more closely monitor patients with high probabilities of spetic shock and consider preventive treatments.
+
+![](predictions_window.jpg)
+
+### Multivariate State Sequence
+
+One of the characteristics of EHR is that the time intervals between reords are not necessarily even. In addition, different tracked values such as vitals are not recorded at each time step. For conventional time sequence modelling, such as RNN or LSTM, the assumption is that time steps are at regular intervals, such as 30 minutes. An approach to preprocess such records is to convert them to a multivariate state sequence.
+
+![](mss.jpg)
+
+
+### References
+
+This project was a capstone for the NC State University's AI Academy certification program in Artificial Intelligence.
+
+[1] Farzaneh Khoshnevisan, Julie Ivy, Muge Capan, Ryan Arnold, Jeanne M. Huddleston, and Min Chi, [Recent Temporal Pattern Mining for Septic Shock Early Prediction](https://www.researchgate.net/profile/Farzaneh-Khoshnevisan/publication/325273093_Recent_Temporal_Pattern_Mining_for_Septic_Shock_Early_Prediction/links/5b172e5345851547bba33cd1/Recent-Temporal-Pattern-Mining-for-Septic-Shock-Early-Prediction.pdf)
 
 ### Top level notebooks:
 
